@@ -32,8 +32,8 @@ export default async ({ req, res, log, error }) => {
 
       console.log('response', response.total, response.documents.length)
 
-      // if (response.documents.length === 0 || updatedCount >= response.total) break;
-      if (response.documents.length === 0 || updatedCount === 10) break;
+      if (response.documents.length === 0 || updatedCount >= response.total) break;
+      // if (response.documents.length === 0 || updatedCount === 10) break;
 
       for (const doc of response.documents) {
         await databases.updateDocument(databaseId, collectionId, doc.$id, {
