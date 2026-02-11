@@ -18,7 +18,7 @@ export default async ({ req, res, log, error }) => {
     today.setHours(0, 0, 0, 0); // start of today
 
     let offset = 0;
-    const limit = 10;
+    const limit = 50;
     let updatedCount = 0;
 
     while (true) {
