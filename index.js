@@ -50,6 +50,34 @@ export default async ({ req, res, log, error }) => {
       offset += limit;
     }
 
+      while (true) {
+   const response = await databases.listDocuments(databaseId, bookingCollectionId, [
+  Query.lessThanEqual("onwardDate", today.toISOString()),
+  Query.greaterThanEqual("returnDate", today.toISOString()),
+  Query.limit(limit),
+  Query.offset(offset),
+  Query.orderAsc("$createdAt"),
+]);
+
+
+      console.log('booking travelling response', response.total, response.documents.length)
+
+      if (response.documents.length === 0 || bookingUpdatedCount >= response.total) break;
+      // if (response.documents.length === 0 || updatedCount === 10) break;
+
+      for (const doc of response.documents) {
+        await databases.updateDocument(databaseId, bookingCollectionId, doc.$id, {
+          status: "Travelling",
+        });
+
+        bookingUpdatedCount++;
+        console.log(`✅ Updated booking ${doc.$id} to Yet to travel`);
+      }
+
+      offset += limit;
+    }
+
+
      while (true) {
       const response = await databases.listDocuments(databaseId, bookingCollectionId, [
         Query.lessThanEqual("returnDate", today.toISOString()),
@@ -75,34 +103,7 @@ export default async ({ req, res, log, error }) => {
 
       offset += limit;
     }
-     while (true) {
-      const response = await databases.listDocuments(databaseId, bookingCollectionId, [
-        Query.greaterThanEqual('onwardDate', today.toISOString()),
-        Query.lessThan("returnDate", today.toISOString()),
-        Query.limit(limit),
-        Query.offset(offset),
-        Query.orderAsc("$createdAt"),
-        Query.equal("status", "Yet to travel")
-
-      ]);
-
-      console.log('booking yet to travel response', response.total, response.documents.length)
-
-      if (response.documents.length === 0 || bookingUpdatedCount >= response.total) break;
-      // if (response.documents.length === 0 || updatedCount === 10) break;
-
-      for (const doc of response.documents) {
-        await databases.updateDocument(databaseId, bookingCollectionId, doc.$id, {
-          status: "Travelling",
-        });
-
-        bookingUpdatedCount++;
-        console.log(`✅ Updated booking ${doc.$id} to Yet to travel`);
-      }
-
-      offset += limit;
-    }
-
+   
     return {
       success: true,
       message: "Daily request status update completed",
