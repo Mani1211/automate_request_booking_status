@@ -55,7 +55,7 @@ export default async ({ req, res, log, error }) => {
         Query.lessThanEqual("returnDate", today.toISOString()),
         Query.limit(limit),
         Query.offset(offset),
-        Query.orderAsc("$createdAt")
+        Query.orderAsc("$createdAt"),
         Query.equal("status", "Yet to travel")
       ]);
 
@@ -81,7 +81,7 @@ export default async ({ req, res, log, error }) => {
         Query.lessThan("returnDate", today.toISOString()),
         Query.limit(limit),
         Query.offset(offset),
-        Query.orderAsc("$createdAt")
+        Query.orderAsc("$createdAt"),
         Query.equal("status", "Yet to travel")
 
       ]);
