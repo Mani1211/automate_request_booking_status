@@ -43,7 +43,7 @@ export default async ({ req, res, log, error }) => {
           status: "Adventure Completed",
         });
 
-        updatedCount++;
+        requestUpdatedCount++;
         console.log(`✅ Updated request ${doc.$id} to Adventure Completed`);
       }
 
@@ -103,7 +103,9 @@ export default async ({ req, res, log, error }) => {
     return {
       success: true,
       message: "Daily request status update completed",
-      updatedCount,
+      requestUpdatedCount,
+      bookingUpdatedCount,
+      bookingTravellingCount
     };
   } catch (err) {
     console.error("❌ Error updating request statuses: " + err.message);
