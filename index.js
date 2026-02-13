@@ -56,6 +56,7 @@ export default async ({ req, res, log, error }) => {
         Query.limit(limit),
         Query.offset(offset),
         Query.orderAsc("$createdAt")
+        Query.equal("status", "Yet to travel")
       ]);
 
       console.log('booking response', response.total, response.documents.length)
@@ -81,6 +82,8 @@ export default async ({ req, res, log, error }) => {
         Query.limit(limit),
         Query.offset(offset),
         Query.orderAsc("$createdAt")
+        Query.equal("status", "Yet to travel")
+
       ]);
 
       console.log('booking response', response.total, response.documents.length)
@@ -90,7 +93,7 @@ export default async ({ req, res, log, error }) => {
 
       for (const doc of response.documents) {
         await databases.updateDocument(databaseId, bookingCollectionId, doc.$id, {
-          status: "Yet to travel",
+          status: "Travelling",
         });
 
         bookingUpdatedCount++;
