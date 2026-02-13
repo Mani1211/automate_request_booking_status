@@ -30,7 +30,8 @@ export default async ({ req, res, log, error }) => {
         Query.equal("status", "Booking Confirmed"),
         Query.limit(limit),
         Query.offset(offset),
-        Query.orderAsc("$createdAt")
+        Query.orderAsc("$createdAt"), 
+        Query.select(["$id", "status"])
       ]);
 
       console.log('request response', response.total, response.documents.length)
@@ -57,6 +58,8 @@ export default async ({ req, res, log, error }) => {
   Query.limit(limit),
   Query.offset(offset),
   Query.orderAsc("$createdAt"),
+        Query.equal("bookingCancelled", false),
+        Query.select(["$id", "status"])
 ]);
 
 
@@ -71,7 +74,7 @@ export default async ({ req, res, log, error }) => {
         });
 
         bookingUpdatedCount++;
-        console.log(`✅ Updated booking ${doc.$id} to Yet to travel`);
+        console.log(`✅ Updated booking ${doc.$id} to Travelling on ${today.toISOString()}`);
       }
 
       offset += limit;
@@ -84,7 +87,9 @@ export default async ({ req, res, log, error }) => {
         Query.limit(limit),
         Query.offset(offset),
         Query.orderAsc("$createdAt"),
-        Query.equal("status", "Yet to travel")
+        Query.equal("status", "Yet to travel"),
+        Query.equal("bookingCancelled", false),
+        Query.select(["$id", "status"])
       ]);
 
       console.log('booking response', response.total, response.documents.length)
