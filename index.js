@@ -89,7 +89,7 @@ export default async ({ req, res, log, error }) => {
         Query.limit(limit),
         Query.offset(offset),
         Query.orderAsc("$createdAt"),
-        Query.contains("status", ["Yet to travel", 'Travelling']),
+        Query.notEqual("status", "Travel completed"),
         Query.equal("bookingCancelled", false),
         Query.select(["$id", "status"])
       ]);
