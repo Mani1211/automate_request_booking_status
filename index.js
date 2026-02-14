@@ -2,6 +2,7 @@ import { Client, Databases, Query } from "node-appwrite";
 import dotenv from "dotenv";
 dotenv.config();
 
+
 export default async ({ req, res, log, error }) => {
   const client = new Client()
     .setEndpoint(process.env.VITE_APPWRITE_URL)
@@ -59,6 +60,7 @@ export default async ({ req, res, log, error }) => {
   Query.offset(offset),
   Query.orderAsc("$createdAt"),
         Query.equal("bookingCancelled", false),
+        Query.notEqual("status", "Travelling"),
         Query.select(["$id", "status"])
 ]);
 
@@ -87,12 +89,12 @@ export default async ({ req, res, log, error }) => {
         Query.limit(limit),
         Query.offset(offset),
         Query.orderAsc("$createdAt"),
-        Query.equal("status", "Yet to travel"),
+        Query.contains("status", ["Yet to travel", 'Travelling']),
         Query.equal("bookingCancelled", false),
         Query.select(["$id", "status"])
       ]);
 
-      console.log('booking response', response.total, response.documents.length)
+      console.log('booking completed response', response.total, response.documents.length)
 
       if (response.documents.length === 0 || bookingUpdatedCount >= response.total) break;
       // if (response.documents.length === 0 || updatedCount === 10) break;
@@ -125,3 +127,5 @@ export default async ({ req, res, log, error }) => {
     };
   }
 };
+
+
