@@ -104,7 +104,7 @@ export default async ({ req, res, log, error }) => {
           status: "Travel completed",
         });
 
-        bookingUpdatedCount++;
+        bookingTravellingCount++;
         console.log(`✅ Updated booking ${doc.$id} to Travel completed`);
       }
 
