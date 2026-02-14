@@ -96,7 +96,7 @@ export default async ({ req, res, log, error }) => {
 
       console.log('booking completed response', response.total, response.documents.length)
 
-      if (response.documents.length === 0 || bookingUpdatedCount >= response.total) break;
+      if (response.documents.length === 0 || bookingTravellingCount >= response.total) break;
       // if (response.documents.length === 0 || updatedCount === 10) break;
 
       for (const doc of response.documents) {
