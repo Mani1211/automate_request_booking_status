@@ -20,6 +20,8 @@ export default async ({ req, res, log, error }) => {
     today.setHours(0, 0, 0, 0); // start of today
 
     let offset = 0;
+    let offset2 = 0;
+    let offset3 = 0;
     const limit = 50;
     let requestUpdatedCount = 0;
     let bookingUpdatedCount = 0;
@@ -57,7 +59,7 @@ export default async ({ req, res, log, error }) => {
   Query.lessThanEqual("onwardDate", today.toISOString()),
   Query.greaterThanEqual("returnDate", today.toISOString()),
   Query.limit(limit),
-  Query.offset(offset),
+  Query.offset(offset2),
   Query.orderAsc("$createdAt"),
         Query.equal("bookingCancelled", false),
         Query.notEqual("status", "Travelling"),
@@ -79,7 +81,7 @@ export default async ({ req, res, log, error }) => {
         console.log(`✅ Updated booking ${doc.$id} to Travelling on ${today.toISOString()}`);
       }
 
-      offset += limit;
+      offset2 += limit;
     }
 
 
@@ -87,7 +89,7 @@ export default async ({ req, res, log, error }) => {
       const response = await databases.listDocuments(databaseId, bookingCollectionId, [
         Query.lessThanEqual("returnDate", today.toISOString()),
         Query.limit(limit),
-        Query.offset(offset),
+        Query.offset(offset3),
         Query.orderAsc("$createdAt"),
         Query.notEqual("status", "Travel completed"),
         Query.equal("bookingCancelled", false),
@@ -108,7 +110,7 @@ export default async ({ req, res, log, error }) => {
         console.log(`✅ Updated booking ${doc.$id} to Travel completed`);
       }
 
-      offset += limit;
+      offset3 += limit;
     }
    
     return {
